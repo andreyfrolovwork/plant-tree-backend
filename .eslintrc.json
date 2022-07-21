@@ -60,10 +60,7 @@
     "space-in-parens": "error",
     "space-infix-ops": "error",
     "space-unary-ops": "error",
-    "quotes": [
-      "error",
-      "double"
-    ],
+    "quotes": ["error", "double"],
     //
     "max-len": [
       "error",
@@ -78,10 +75,7 @@
       }
     ],
     "keyword-spacing": "error",
-    "multiline-ternary": [
-      "error",
-      "never"
-    ],
+    "multiline-ternary": ["error", "never"],
     /*"no-mixed-operators": "error",*/
     //
     "no-multiple-empty-lines": [

@@ -6,7 +6,7 @@ afterAll(() => {
 });
 
 describe("check auth", () => {
-  test("should not auth code", async () => {
+  test("should respond with a 401 code", async () => {
     try {
       const res = request(app).get("/api/users");
       expect(res.statusCode.toBe(401));

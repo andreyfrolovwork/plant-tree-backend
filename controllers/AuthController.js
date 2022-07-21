@@ -1,8 +1,10 @@
 const userService = require("../service/user-service");
 const { validationResult } = require("express-validator");
 const ApiError = require("../exceptions/api-error");
+const models = require("../models/index.js");
+const checkSignature = require("../shared/checkSignature.js");
 
-class UserController {
+class AuthController {
   async registration(req, res, next) {
     try {
       const errors = validationResult(req);
@@ -61,6 +63,26 @@ class UserController {
     }
   }
 
+  async authWithTg(req, res, next) {
+    try {
+      const userData = req.body;
+      if (
+        !checkSignature({
+          hash: userData.hash,
+          ...userData,
+        })
+      ) {
+        throw ApiError.UnauthorizedError();
+      }
+      const user = await models.users.find({
+        tgAccount: userData.username,
+      });
+      console.log("");
+    } catch (e) {
+      next(e);
+    }
+  }
+
   async getUsers(req, res, next) {
     try {
       const users = await userService.getAllUsers();
@@ -71,5 +93,4 @@ class UserController {
   }
 }
 
-
-module.exports = new UserController()
+module.exports = new AuthController();
