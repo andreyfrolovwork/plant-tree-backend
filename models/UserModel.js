@@ -1,11 +1,16 @@
-const { Schema, model } = require("mongoose");
-
+const { Schema, model } = require("mongoose")
+const Tree = new Schema({
+  buyDate: { type: Date, default: Date.now() },
+})
 const UserSchema = new Schema({
-  email: { type: String, unique: true, required: true },
-  password: { type: String, required: true },
+  login: { type: String, /*unique: true,*/ required: false },
+  email: { type: String, /*unique: true, */ required: false, default: null },
+  password: { type: String, required: false, default: null },
   isActivated: { type: Boolean, default: false },
-  activationLink: { type: String },
-  tgAccount: { type: String, default: null },
-});
+  tgAccount: { type: String, default: null /*unique: true*/ },
+  store: {
+    trees: [Tree],
+  },
+})
 
-module.exports = model("User", UserSchema);
+module.exports = model("User", UserSchema)
