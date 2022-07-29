@@ -1,5 +1,6 @@
 check.js
 bot1.js
+*.idea
 # Logs
 logs
 *.log
