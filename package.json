@@ -2,13 +2,22 @@
   "name": "server",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "app/index.js",
   "scripts": {
-    "dev": "nodemon index.js"
+    "dev": "nodemon app/index.js",
+    "test": "jest  --forceExit --watchAll --detectOpenHandles --verbose --maxWorkers=1",
+    "test-cov": "jest  --forceExit --watchAll --detectOpenHandles --verbose --coverage --maxWorkers=1"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
+  "jest": {
+    "testTimeout": 30000,
+    "testEnvironment": "node",
+    "coveragePathIgnorePatterns": [
+      "/node_modules/"
+    ]
+  },
   "dependencies": {
     "bcrypt": "^5.0.1",
     "cookie-parser": "^1.4.5",
@@ -27,6 +36,10 @@
     "uuid": "^8.3.2"
   },
   "devDependencies": {
+    "@faker-js/faker": "^7.3.0",
+    "@types/express": "^4.17.13",
+    "@types/mongoose": "^5.11.97",
+    "@types/supertest": "^2.0.12",
     "eslint": "^8.19.0",
     "nodemon": "^2.0.7"
   }

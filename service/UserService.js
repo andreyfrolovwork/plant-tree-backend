@@ -57,6 +57,14 @@ class UserService {
     return { ...tokens, user: userDto }
   }
 
+  static async logWithTg(user) {
+    const userDto = new UserDto(user)
+    const tokens = tokenService.generateTokens({ ...userDto })
+
+    await tokenService.saveToken(userDto.id, tokens.refreshToken)
+    return { ...tokens, user: userDto }
+  }
+
   static async logout(refreshToken) {
     const token = await tokenService.removeToken(refreshToken)
     return token
@@ -84,14 +92,6 @@ class UserService {
       tgAccount,
     })
     return newUser
-  }
-
-  static async logWithTg(user) {
-    const userDto = new UserDto(user)
-    const tokens = tokenService.generateTokens({ ...userDto })
-
-    await tokenService.saveToken(userDto.id, tokens.refreshToken)
-    return { ...tokens, user: userDto }
   }
 
   static async getAllUsers() {

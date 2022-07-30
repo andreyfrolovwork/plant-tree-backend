@@ -9,10 +9,6 @@ const { v1 } = require("uuid")
 class AuthController {
   async registration(req, res, next) {
     try {
-      const errors = validationResult(req)
-      if (!errors.isEmpty()) {
-        return next(ApiError.BadRequest("Ошибка при валидации", errors.array()))
-      }
       const { email, password } = req.body
       const userData = await userService.registration(email, password)
       res.cookie("refreshToken", userData.refreshToken, { maxAge: 30 * 24 * 60 * 60 * 1000, httpOnly: true })
@@ -67,27 +63,29 @@ class AuthController {
 
   async authWithTg(req, res, next) {
     try {
-      const userData = req.body
+      const tgUser = req.body
       if (
         !checkSignature({
-          hash: userData.hash,
-          ...userData,
+          hash: tgUser.hash,
+          ...tgUser,
         })
       ) {
         throw ApiError.UnauthorizedError()
       }
       const user = await models.users.find({
-        tgAccount: userData.username,
+        tgAccount: tgUser.username,
       })
       console.log(user[0])
       if (user.length === 0) {
-        const newUser = await UserService.createUser({ login: v1(), tgAccount: userData.username })
-        const response = await UserService.logWithTg(newUser)
-        res.json(response)
+        const newUser = await UserService.createUser({ login: v1(), tgAccount: tgUser.username })
+        const userData = await UserService.logWithTg(newUser)
+        res.cookie("refreshToken", userData.refreshToken, { maxAge: 30 * 24 * 60 * 60 * 1000, httpOnly: true })
+        res.json(userData)
       }
       if (user.length !== 0) {
-        const response = await UserService.logWithTg(user[0]._doc)
-        res.json(response)
+        const userData = await UserService.logWithTg(user[0]._doc)
+        res.cookie("refreshToken", userData.refreshToken, { maxAge: 30 * 24 * 60 * 60 * 1000, httpOnly: true })
+        res.json(userData)
       }
 
       console.log("")

@@ -1,6 +1,10 @@
-check.js
-bot1.js
-*.idea
+# my rules
+check/check.js
+check/bot1.js
+check
+.idea
+
+
 # Logs
 logs
 *.log
