@@ -1,7 +1,7 @@
 require("dotenv").config()
 const mongoose = require("mongoose")
 const PORT = process.env.PORT_DEV
-const app = require("./app.js")
+const app = require("./app/app.js")
 
 const start = async () => {
   try {

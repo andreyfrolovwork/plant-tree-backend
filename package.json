@@ -2,9 +2,9 @@
   "name": "server",
   "version": "1.0.0",
   "description": "",
-  "main": "app/index.js",
+  "main": "index.js",
   "scripts": {
-    "dev": "nodemon app/index.js",
+    "dev": "nodemon index.js",
     "test": "jest  --forceExit --watchAll --detectOpenHandles --verbose --maxWorkers=1",
     "test-cov": "jest  --forceExit --watchAll --detectOpenHandles --verbose --coverage --maxWorkers=1"
   },
