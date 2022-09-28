@@ -16,10 +16,6 @@ afterAll(async () => {
 })
 
 describe("check_auth", () => {
-  const user = {
-    email: faker.internet.email(),
-    password: v1(),
-  }
 
   test("/test - simple test", async () => {
     const res = await request(app).get("/api/test")
@@ -31,32 +27,33 @@ describe("check_auth", () => {
     expect(res.statusCode).toBe(401)
   })
 
-  let userReturn
-  test("/signup - create new user", async () => {
-    console.log("start")
-    const res = await request(app).post("/api/signup").send(user)
-    userReturn = { ...res._body }
+
+  test("/signup - create new user and login and test private route with new credentials", async () => {
+    const NewUser = {
+      email: faker.internet.email(),
+      password: v1(),
+    }
+    const res = await request(app).post("/api/signup").send(NewUser)
+    const userReturn = { ...res._body }
     expect(res._body).toHaveProperty("accessToken")
     expect(res._body).toHaveProperty("refreshToken")
     expect(res.statusCode).toBe(200)
-  })
 
-  test("/login - logged in with new user", async () => {
-    const res = await request(app).post("/api/login").send(user)
-    expect(res._body).toHaveProperty("accessToken")
-    expect(res._body).toHaveProperty("refreshToken")
-    expect(res.statusCode).toBe(200)
-  })
+    const res2 = await request(app).post("/api/login").send(NewUser)
+    expect(res2._body).toHaveProperty("accessToken")
+    expect(res2._body).toHaveProperty("refreshToken")
+    expect(res2.statusCode).toBe(200)
 
-  test("/login - test private route with auth headers", async () => {
-    const res = await request(app)
+    const res3 = await request(app)
       .get("/api/test-auth")
       .set({
         Authorization: `Bearer ${userReturn.accessToken}`,
       })
-      .send(user)
-    expect(res._body).toEqual("ok")
+      .send(NewUser)
+    expect(res3._body).toEqual("ok")
+
   })
+
 
   test("check accessToken expired", async () => {
     // change env
