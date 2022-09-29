@@ -1,13 +1,36 @@
-const { Schema, model } = require("mongoose")
+const { Schema, model, ObjectId } = require("mongoose")
 const Tree = new Schema({
-  buyDate: { type: Date, default: Date.now() },
+  buyDate: {
+    type: Date,
+    default: Date.now(),
+  },
+  treeRef: {
+    type: ObjectId,
+  },
 })
 const UserSchema = new Schema({
-  login: { type: String, /*unique: true,*/ required: false },
-  email: { type: String, /*unique: true, */ required: false, default: null },
-  password: { type: String, required: false, default: null },
-  isActivated: { type: Boolean, default: false },
-  tgAccount: { type: String, default: null /*unique: true*/ },
+  login: {
+    type: String /*unique: true,*/,
+    required: false,
+  },
+  email: {
+    type: String /*unique: true, */,
+    required: false,
+    default: null,
+  },
+  password: {
+    type: String,
+    required: false,
+    default: null,
+  },
+  isActivated: {
+    type: Boolean,
+    default: false,
+  },
+  tgAccount: {
+    type: String,
+    default: null /*unique: true*/,
+  },
   store: {
     trees: [Tree],
   },
