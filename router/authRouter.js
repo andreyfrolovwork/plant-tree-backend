@@ -22,6 +22,4 @@ router.post("/f2", TestService.f2)
 router.get("/test", TestService.test)
 router.get("/test-auth", authMiddleware, TestService.testAuth)
 
-router.get("/trees-all", TreeController.getTreesInStore)
-router.post("/trees-add", TreeController.addTreeInStore)
 module.exports = router

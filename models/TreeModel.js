@@ -21,15 +21,23 @@ const TreeSchema = new Schema({
   },
   lifeSpan: {
     type: Number,
-    required: false,
+    required: true,
   },
   height: {
     type: Number,
-    required: false,
+    required: true,
+  },
+  description: {
+    type: String,
+    required: true,
   },
   inStore: {
     type: Boolean,
     required: true,
+  },
+  picturePath: {
+    type: String,
+    required: false,
   },
 })
 

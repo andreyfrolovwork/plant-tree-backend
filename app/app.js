@@ -16,6 +16,8 @@ app.use(
   })
 )
 
+app.use("/images", express.static("storage"))
+
 function getUrlDb() {
   require("dotenv").config()
   if (process.env.NODE_ENV === "test") {
