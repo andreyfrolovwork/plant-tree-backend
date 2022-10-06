@@ -1,4 +1,5 @@
 const TreeModel = require("../models/TreeModel.js")
+const { unlink } = require("node:fs/promises")
 
 class TreeService {
   static async getTreesInStore() {
@@ -6,11 +7,21 @@ class TreeService {
       inStore: true,
     })
   }
+
   static async deleteTree(id) {
-    return TreeModel.deleteOne({
-      _id: id,
-    })
+    try {
+      const tree = await TreeModel.findOne({
+        _id: id,
+      })
+      await unlink(`storage/store/${tree.picturePath}`)
+      return TreeModel.deleteOne({
+        _id: id,
+      })
+    } catch (e) {
+      throw e
+    }
   }
+
   static async saveTree(tree) {
     return TreeModel.updateOne(
       {
