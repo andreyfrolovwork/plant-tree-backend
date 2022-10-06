@@ -105,6 +105,7 @@
     "no-useless-catch": "off",
     "no-debugger": "off",
     "no-mixed-operators": "off",
-    "semi": "off"
+    "semi": "off",
+    "multiline-ternary": "off"
   }
 }

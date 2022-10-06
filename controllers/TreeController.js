@@ -5,10 +5,90 @@ const isString = require("../shared/isString.js")
 const { isNumeric, isBoolean } = require("validator")
 const { unlink } = require("node:fs/promises")
 
+function delUndef(obj) {
+  const newObj = {}
+  for (const prop in obj) {
+    if (obj[prop] !== undefined) {
+      newObj[prop] = obj[prop]
+    }
+  }
+  return newObj
+}
+
 class TreeController {
-  static async getTreesInStore(req, res, next) {
+  static async getAllTreesInStore(req, res, next) {
     try {
-      const Trees = await TreeService.getTreesInStore()
+      const trees = await TreeService.getTreesInStore()
+      res.json(trees)
+    } catch (e) {
+      next(e)
+    }
+  }
+
+  static async deleteTree(req, res, next) {
+    try {
+      const { _id } = req.body
+      if (!_id) {
+        throw new Error("Отсутствует id")
+      }
+      await TreeService.deleteTree(_id).then((r) => {
+        res.json({ message: "ok" })
+      })
+    } catch (e) {
+      next(e)
+    }
+  }
+
+  static async saveTree(req, res, next) {
+    try {
+      const { _id, name, specie, price, absorptionCo2, lifeSpan, height, inStore, description } = req.body
+      const picturePath = req.savedFiles
+        ? req.savedFiles.picturePath
+          ? req.savedFiles.picturePath
+          : undefined
+        : undefined
+
+      const tree = {
+        _id,
+        name,
+        specie,
+        price,
+        absorptionCo2,
+        lifeSpan,
+        height,
+        inStore,
+        description,
+        picturePath,
+      }
+      const newTree = delUndef(tree)
+
+      await TreeService.saveTree(newTree)
+      res.json({
+        message: "ok",
+      })
+    } catch (e) {
+      if (Object.keys(req.savedFiles).length !== 0) {
+        for (const prop in req.savedFiles) {
+          await unlink(`storage/store/${req.savedFiles[prop]}`)
+        }
+      }
+      next(e)
+    }
+  }
+
+  static async addEmptyTree(req, res, next) {
+    try {
+      await TreeService.addTree()
+      res.status(201).json({ message: "ok" })
+    } catch (e) {
+      next(e)
+    }
+  }
+
+  static async getAllTrees(req, res, next) {
+    try {
+      const Trees = await TreeService.allTrees()
+      res.json(Trees)
     } catch (e) {
       next(e)
     }
@@ -48,7 +128,7 @@ class TreeController {
     } catch (e) {
       if (Object.keys(req.savedFiles).length !== 0) {
         for (const prop in req.savedFiles) {
-          await unlink("storage/store/" + req.savedFiles[prop])
+          await unlink(`storage/store/${req.savedFiles[prop]}`)
         }
       }
       next(e)

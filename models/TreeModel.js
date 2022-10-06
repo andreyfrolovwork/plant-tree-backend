@@ -4,6 +4,7 @@ const TreeSchema = new Schema({
   name: {
     type: String,
     required: true,
+    default: "",
   },
   specie: {
     type: String,
@@ -14,30 +15,37 @@ const TreeSchema = new Schema({
   price: {
     type: Number,
     required: true,
+    default: 0,
   },
   absorptionCo2: {
-    type: Number,
+    type: String,
     required: true,
+    default: 0,
   },
   lifeSpan: {
     type: Number,
     required: true,
+    default: 0,
   },
   height: {
     type: Number,
     required: true,
+    default: 0,
   },
   description: {
     type: String,
     required: true,
+    default: "",
   },
   inStore: {
     type: Boolean,
     required: true,
+    default: false,
   },
   picturePath: {
     type: String,
     required: false,
+    default: "",
   },
 })
 
