@@ -21,6 +21,7 @@ class UserService {
       email: email,
       password: hashPassword,
       activationLink,
+      role: "user",
       isActivated: false,
     })
     /*    await mailService.sendActivationMail(email, `${process.env.API_URL}/api/activate/${activationLink}`);*/

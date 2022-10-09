@@ -50,3 +50,4 @@ const TreeSchema = new Schema({
 })
 
 module.exports = model("Tree", TreeSchema)
+module.exports.TreeSchema = TreeSchema

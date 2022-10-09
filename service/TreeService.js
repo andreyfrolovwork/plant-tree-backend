@@ -1,7 +1,62 @@
 const TreeModel = require("../models/TreeModel.js")
+const UserModel = require("../models/UserModel.js")
+const TestModel = require("../models/TestModel.js")
 const { unlink } = require("node:fs/promises")
 
 class TreeService {
+  static async getMyTrees({ user }) {
+    try {
+      const userDb = await UserModel.findOne({
+        _id: user.id,
+      })
+      return userDb.history
+    } catch (e) {
+      throw e
+    }
+  }
+  static async addPaidTrees({ trees, user }) {
+    const items = []
+    for (const tree of trees) {
+      const treeFromDb = await TreeModel.findOne({
+        _id: tree._id,
+      })
+      items.push({
+        count: tree.count,
+        tree: treeFromDb,
+      })
+    }
+
+    const totalPrice = items.reduce((accum, el) => {
+      return accum + el.tree.price * el.count
+    }, 0)
+
+    const newPurchare = {
+      buyDate: new Date(),
+      items,
+      totalPrice: totalPrice,
+    }
+    try {
+      const u = await UserModel.updateOne(
+        {
+          _id: user.id,
+        },
+        {
+          $push: {
+            history: newPurchare,
+          },
+        }
+      )
+
+      const u2 = await UserModel.findOne({
+        _id: user.id,
+      })
+
+      console.log("e")
+    } catch (e) {
+      throw e
+    }
+  }
+
   static async getTreesInStore() {
     return TreeModel.find({
       inStore: true,

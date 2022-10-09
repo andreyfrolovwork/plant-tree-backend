@@ -77,7 +77,7 @@ class AuthController {
       })
       console.log(user[0])
       if (user.length === 0) {
-        const newUser = await UserService.createUser({ login: v1(), tgAccount: tgUser.username })
+        const newUser = await UserService.createUser({ login: v1(), tgAccount: tgUser.username, role: "user" })
         const userData = await UserService.logWithTg(newUser)
         res.cookie("refreshToken", userData.refreshToken, { maxAge: 30 * 24 * 60 * 60 * 1000, httpOnly: true })
         res.json(userData)

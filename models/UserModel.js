@@ -1,13 +1,8 @@
 const { Schema, model, ObjectId } = require("mongoose")
-const Tree = new Schema({
-  buyDate: {
-    type: Date,
-    default: Date.now(),
-  },
-  treeRef: {
-    type: ObjectId,
-  },
-})
+const { TreeSchema } = require("../models/TreeModel.js")
+
+const Tree = new Schema()
+
 const UserSchema = new Schema({
   login: {
     type: String /*unique: true,*/,
@@ -31,9 +26,26 @@ const UserSchema = new Schema({
     type: String,
     default: null /*unique: true*/,
   },
-  store: {
-    trees: [Tree],
+  role: {
+    type: String,
+    enum: ["admin", "user"],
+    default: "user",
   },
+  history: [
+    {
+      buyDate: {
+        type: Date,
+        default: Date.now(),
+      },
+      items: [
+        {
+          count: Number,
+          tree: TreeSchema,
+        },
+      ],
+      totalPrice: Number,
+    },
+  ],
 })
 
 module.exports = model("User", UserSchema)

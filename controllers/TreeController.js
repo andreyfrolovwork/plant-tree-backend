@@ -16,6 +16,29 @@ function delUndef(obj) {
 }
 
 class TreeController {
+  static async getMyTrees(req, res, next) {
+    try {
+      const hist = await TreeService.getMyTrees({
+        user: req.user,
+      })
+      res.json(hist)
+    } catch (e) {
+      next(e)
+    }
+  }
+  static async buyTrees(req, res, next) {
+    try {
+      const { trees } = req.body
+      await TreeService.addPaidTrees({
+        user: req.user,
+        trees,
+      })
+      res.json({ message: "ok" })
+    } catch (e) {
+      next(e)
+    }
+  }
+
   static async getAllTreesInStore(req, res, next) {
     try {
       const trees = await TreeService.getTreesInStore()
