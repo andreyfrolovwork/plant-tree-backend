@@ -9,11 +9,42 @@ class TreeService {
       const userDb = await UserModel.findOne({
         _id: user.id,
       })
-      return userDb.history
+
+      const history = userDb.history.map((histEl) => {
+        const items = histEl.items.map((buyedTree) => {
+          const trees = []
+          for (let i = 0; i < buyedTree.count; i++) {
+            trees.push({ ...buyedTree.tree._doc })
+          }
+          return {
+            count: buyedTree.count,
+            trees,
+          }
+        })
+        return {
+          buyDate: histEl.buyDate,
+          totalPrice: histEl.totalPrice,
+          items,
+        }
+      })
+      /*return history*/
+      const trees = []
+      history.forEach((histEl) => {
+        histEl.items.forEach((item) => {
+          item.trees.forEach((tree) => {
+            trees.push({
+              ...tree,
+              buyData: histEl.buyDate,
+            })
+          })
+        })
+      })
+      return trees
     } catch (e) {
       throw e
     }
   }
+
   static async addPaidTrees({ trees, user }) {
     const items = []
     for (const tree of trees) {

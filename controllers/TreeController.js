@@ -28,7 +28,8 @@ class TreeController {
   }
   static async buyTrees(req, res, next) {
     try {
-      const { trees } = req.body
+      const trees = req.body.items
+
       await TreeService.addPaidTrees({
         user: req.user,
         trees,
