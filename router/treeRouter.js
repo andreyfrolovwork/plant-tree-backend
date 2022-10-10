@@ -14,6 +14,6 @@ router.post("/trees-add", adminMiddleware, fileMiddleware.any(), TreeController.
 router.post("/trees-buy", userMiddleware, TreeController.buyTrees)
 router.get("/trees-my", userMiddleware, TreeController.getMyTrees)
 
-router.get("/trees-all-in-store", TreeController.getAllTreesInStore)
+router.post("/trees-all-in-store", TreeController.getAllTreesInStore)
 
 module.exports = router

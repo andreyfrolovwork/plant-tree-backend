@@ -42,7 +42,8 @@ class TreeController {
 
   static async getAllTreesInStore(req, res, next) {
     try {
-      const trees = await TreeService.getTreesInStore()
+      const { type } = req.body
+      const trees = await TreeService.getTreesInStore(type)
       res.json(trees)
     } catch (e) {
       next(e)

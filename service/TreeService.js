@@ -88,10 +88,17 @@ class TreeService {
     }
   }
 
-  static async getTreesInStore() {
-    return TreeModel.find({
-      inStore: true,
-    })
+  static async getTreesInStore(type) {
+    if (type) {
+      return TreeModel.find({
+        inStore: true,
+        specie: type,
+      })
+    } else {
+      return TreeModel.find({
+        inStore: true,
+      })
+    }
   }
 
   static async deleteTree(id) {
